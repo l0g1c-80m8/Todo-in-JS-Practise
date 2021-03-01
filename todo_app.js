@@ -4,9 +4,20 @@ import { TaskList } from "./task_list.js";
 function TodoApp() {
   var defaultTasks = [
     { caption: "Default todo 1", status: true },
-    { caption: "Default todo 2", status: false },
-    { caption: "Default todo 3", status: false },
-    { caption: "Default todo 4", status: false },
+    {
+      caption:
+        "Create a new object to reflect changes, rather than changing the same object",
+      status: false,
+    },
+    {
+      caption:
+        "Create two different lists that inherit the behavious of the task list with few extra behaviours.",
+      status: false,
+    },
+    {
+      caption: "Try to run the app from a single runApp() function",
+      status: false,
+    },
     { caption: "Default todo 5", status: true },
   ];
 
