@@ -1,0 +1,1 @@
+Simple starter code for a todo app in vanilla JS.
