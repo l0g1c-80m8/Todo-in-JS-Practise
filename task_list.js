@@ -3,9 +3,9 @@ import { composeListItem } from "./helpers.js";
 
 function TaskList(listId, newTasksList = [], reqStatus) {
   var tasks = [];
-  initList(newTasksList);
+  initTaskList(newTasksList);
 
-  function initList(newTasksList) {
+  function initTaskList(newTasksList) {
     if (Array.isArray(newTasksList)) {
       for (var i = 0; i < newTasksList.length; i++) {
         if (newTasksList[i].status === reqStatus) {
@@ -49,11 +49,12 @@ function TaskList(listId, newTasksList = [], reqStatus) {
     return;
   };
 
-  this.editCaption = function editCaption(id, caption) {
+  this.editCaption = function editCaption(id, caption, status) {
+    var modifiedTask = new Task(caption, status);
     for (var i = 0; i < tasks.length; i++) {
       if (tasks[i].getId() === id) {
-        tasks[i].setCaption(caption);
-        return;
+        tasks[i] = modifiedTask;
+        return composeListItem(tasks[i]);
       }
     }
     return;

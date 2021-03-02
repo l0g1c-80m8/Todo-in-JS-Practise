@@ -1,5 +1,6 @@
 // import { RemainingTaskList } from "./remaining_task_list.js";
 import { TaskList } from "./task_list.js";
+import { composeListItem } from "./helpers.js";
 
 function TodoApp() {
   var defaultTasks = [
@@ -7,7 +8,7 @@ function TodoApp() {
     {
       caption:
         "Create a new object to reflect changes, rather than changing the same object",
-      status: false,
+      status: true,
     },
     {
       caption:
@@ -19,6 +20,7 @@ function TodoApp() {
       status: false,
     },
     { caption: "Default todo 5", status: true },
+    { caption: "Default todo 6", status: false },
   ];
 
   var remainingTaskList = new TaskList(
@@ -69,11 +71,15 @@ function TodoApp() {
   this.modifyTaskCaption = function modifyTaskCaption(id) {
     var status = document.getElementById(id + "_checkbox").checked;
     var caption = document.getElementById(id + "_span").textContent;
+    var modifiedListItem;
     if (status) {
-      completedTaskList.editCaption(id, caption);
+      modifiedListItem = completedTaskList.editCaption(id, caption, status);
     } else {
-      remainingTaskList.editCaption(id, caption);
+      modifiedListItem = remainingTaskList.editCaption(id, caption, status);
     }
+    document
+      .getElementById(id)
+      .parentNode.replaceChild(modifiedListItem, document.getElementById(id));
     return;
   };
 
