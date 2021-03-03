@@ -21,6 +21,7 @@ function TodoApp() {
     },
     { caption: "Default todo 5", status: true },
     { caption: "Default todo 6", status: false },
+    { caption: "Make list items draggable and droppable", status: true },
   ];
 
   var remainingTaskList = new TaskList(

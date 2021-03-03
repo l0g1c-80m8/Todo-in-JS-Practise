@@ -4,6 +4,7 @@ import { composeListItem } from "./helpers.js";
 function TaskList(listId, newTasksList = [], reqStatus) {
   var tasks = [];
   initTaskList(newTasksList);
+  enableDragAndDrop(listId);
 
   function initTaskList(newTasksList) {
     if (Array.isArray(newTasksList)) {
@@ -20,6 +21,53 @@ function TaskList(listId, newTasksList = [], reqStatus) {
         }
       }
     }
+  }
+
+  function switchElements(index1, index2) {
+    var holder = tasks[index1];
+    tasks[index1] = tasks[index2];
+    tasks[index2] = holder;
+    return;
+  }
+
+  function enableDragAndDrop(listId) {
+    var listRef = document.getElementById(listId);
+    var dragged, id, index, indexDrop, list, i;
+
+    listRef.addEventListener("dragstart", function ({ target }) {
+      dragged = target;
+      id = target.id;
+      list = listRef.children;
+      for (i = 0; i < list.length; i++) {
+        if (list[i] === dragged) {
+          index = i;
+          break;
+        }
+      }
+    });
+
+    listRef.addEventListener("dragover", function (event) {
+      event.preventDefault();
+    });
+
+    listRef.addEventListener("drop", function ({ target }) {
+      if (dragged && target.className === "dropzone" && target.id !== id) {
+        dragged.remove(dragged);
+        for (let i = 0; i < list.length; i += 1) {
+          if (list[i] === target) {
+            indexDrop = i;
+          }
+        }
+        if (index > indexDrop) {
+          target.before(dragged);
+        } else {
+          target.after(dragged);
+        }
+        switchElements(index, indexDrop);
+      }
+    });
+
+    return;
   }
 
   this.addNewTask = function addNewTask(caption, set) {

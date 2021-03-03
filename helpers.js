@@ -3,6 +3,8 @@ import { changeStatus, deleteListItem, editListItem } from "./script.js";
 function composeListItem(task) {
   var listItem = document.createElement("li");
   listItem.setAttribute("id", task.getId());
+  listItem.setAttribute("draggable", "true");
+  listItem.setAttribute("class", "dropzone");
 
   var checkBox = document.createElement("INPUT");
   checkBox.setAttribute("type", "checkbox");
