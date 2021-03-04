@@ -5,13 +5,16 @@ function TaskList(props) {
   initTaskList(props.defaultTasksList);
   enableDragAndDrop(props.listId);
 
-  function getNewTask(caption, status) {
+  function getNewTask(caption, status, spawnMode, spawnRelative) {
     return new Task({
       caption: caption,
       status: status,
       appendListItem: appendListItem,
+      insertListItem: insertListItem,
+      modifyListItem: modifyListItem,
       deleteTask: deleteTask,
       markComplete: markComplete,
+      spawn: { mode: spawnMode, relative: spawnRelative },
     });
   }
 
@@ -20,7 +23,11 @@ function TaskList(props) {
       for (var i = 0; i < defaultTasksList.length; i++) {
         if (defaultTasksList[i].status === props.reqStatus) {
           tasks.push(
-            getNewTask(defaultTasksList[i].caption, defaultTasksList[i].status)
+            getNewTask(
+              defaultTasksList[i].caption,
+              defaultTasksList[i].status,
+              "append"
+            )
           );
         }
       }
@@ -30,6 +37,12 @@ function TaskList(props) {
 
   function appendListItem(listItem) {
     document.getElementById(props.listId).appendChild(listItem);
+    return;
+  }
+
+  function insertListItem(listItem, relativeIndex) {
+    var relativeElement = document.getElementById(tasks[relativeIndex].getId());
+    relativeElement.after(listItem);
     return;
   }
 
@@ -79,6 +92,17 @@ function TaskList(props) {
       }
     });
 
+    return;
+  }
+
+  function modifyListItem(id, caption, status) {
+    srch3: for (var i = 0; i < tasks.length; i++) {
+      if (id === tasks[i].getId()) {
+        break srch3;
+      }
+    }
+    var newTask = getNewTask(caption, status, "after", i);
+    tasks.splice(i, 0, newTask);
     return;
   }
 

@@ -31,7 +31,7 @@ function Task(props) {
     span.setAttribute("style", status ? "text-decoration: line-through" : "");
     span.innerHTML = caption;
     span.addEventListener("blur", function () {
-      modifyCaption(id + "_span");
+      modifyCaption(id);
     });
 
     var delBtn = document.createElement("INPUT");
@@ -47,12 +47,25 @@ function Task(props) {
     listItem.appendChild(span);
     listItem.appendChild(delBtn);
 
-    props.appendListItem(listItem);
+    switch (props.spawn.mode) {
+      case "append":
+        props.appendListItem(listItem);
+        break;
+      case "after":
+        props.insertListItem(listItem, props.spawn.relative);
+        break;
+    }
     return;
   }
 
   function modifyCaption(id) {
-    caption = document.getElementById(id).innerHTML;
+    props.modifyListItem(
+      id,
+      document.getElementById(id + "_span").innerHTML,
+      status
+    );
+    deleteTask(id);
+    return;
   }
 
   function deleteTask(id) {
