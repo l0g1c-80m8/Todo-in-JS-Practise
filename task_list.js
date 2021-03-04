@@ -14,7 +14,10 @@ function TaskList(props) {
       modifyListItem: modifyListItem,
       deleteTask: deleteTask,
       markComplete: markComplete,
-      spawn: { mode: spawnMode, relative: spawnRelative },
+      spawn: {
+        mode: spawnMode ? spawnMode : "append",
+        relative: spawnRelative,
+      },
     });
   }
 
