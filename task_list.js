@@ -1,32 +1,44 @@
 import { Task } from "./task.js";
-import { composeListItem } from "./helpers.js";
 
-function TaskList(listId, newTasksList = [], reqStatus) {
+function TaskList(props) {
   var tasks = [];
-  initTaskList(newTasksList);
-  enableDragAndDrop(listId);
+  initTaskList(props.defaultTasksList);
+  enableDragAndDrop(props.listId);
 
-  function initTaskList(newTasksList) {
-    if (Array.isArray(newTasksList)) {
-      for (var i = 0; i < newTasksList.length; i++) {
-        if (newTasksList[i].status === reqStatus) {
-          var newTask = new Task(
-            newTasksList[i].caption,
-            newTasksList[i].status
+  function getNewTask(caption, status) {
+    return new Task({
+      caption: caption,
+      status: status,
+      appendListItem: appendListItem,
+      deleteTask: deleteTask,
+      markComplete: markComplete,
+    });
+  }
+
+  function initTaskList(defaultTasksList) {
+    if (Array.isArray(defaultTasksList)) {
+      for (var i = 0; i < defaultTasksList.length; i++) {
+        if (defaultTasksList[i].status === props.reqStatus) {
+          tasks.push(
+            getNewTask(defaultTasksList[i].caption, defaultTasksList[i].status)
           );
-          tasks.push(newTask);
-          document
-            .getElementById(listId)
-            .appendChild(composeListItem(tasks[tasks.length - 1]));
         }
       }
     }
+    return;
   }
 
-  function switchElements(index1, index2) {
-    var holder = tasks[index1];
-    tasks[index1] = tasks[index2];
-    tasks[index2] = holder;
+  function appendListItem(listItem) {
+    document.getElementById(props.listId).appendChild(listItem);
+    return;
+  }
+
+  function rearrangeElements(index1, index2) {
+    var tempRef = tasks[index1];
+    for (var i = index1; i < index2; i++) {
+      tasks[i] = tasks[i + 1];
+    }
+    tasks[index2] = tempRef;
     return;
   }
 
@@ -63,49 +75,41 @@ function TaskList(listId, newTasksList = [], reqStatus) {
         } else {
           target.after(dragged);
         }
-        switchElements(index, indexDrop);
+        rearrangeElements(index, indexDrop);
       }
     });
 
     return;
   }
 
-  this.addNewTask = function addNewTask(caption, set) {
-    var newTask = new Task(caption, set);
-    tasks.push(newTask);
-    document.getElementById(listId).appendChild(composeListItem(newTask));
+  function deleteTask(id) {
+    srch: for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].getId() === id) {
+        tasks.splice(i, 1);
+        break srch;
+      }
+    }
+    return;
+  }
+
+  function markComplete(id) {
+    srch2: for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].getId() === id) {
+        break srch2;
+      }
+    }
+    props.handOff(tasks[i]);
+    return;
+  }
+
+  this.addNewTask = function addNewTask(caption, status) {
+    tasks.push(getNewTask(caption, status));
     return;
   };
 
-  this.removeTask = function removeTask(id) {
-    var index = -1;
-    var removed;
-    search: for (var i = 0; i < tasks.length; i++) {
-      if (tasks[i].getId() === id) {
-        index = i;
-        break search;
-      }
-    }
-    if (~index) {
-      removed = tasks.splice(index, 1);
-    }
-    return removed;
-  };
-
-  this.clearTasks = function clearTasks() {
+  this.clearTasks = function clearTasks(listId) {
+    document.getElementById(listId).textContent = "";
     tasks = [];
-    return;
-  };
-
-  this.editCaption = function editCaption(id, caption, status) {
-    var modifiedTask = new Task(caption, status);
-    for (var i = 0; i < tasks.length; i++) {
-      if (tasks[i].getId() === id) {
-        tasks[i] = modifiedTask;
-        return composeListItem(tasks[i]);
-      }
-    }
-    return;
   };
 }
 
