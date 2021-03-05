@@ -130,6 +130,7 @@ function TaskList(props) {
   }
 
   this.addNewTask = function addNewTask(caption, status) {
+    if (caption === "") return;
     tasks.push(getNewTask(caption, status));
     return;
   };
