@@ -20,6 +20,8 @@ function TaskList(props) {
       },
     });
   }
+  //MVC - Model (data), View (html), Controller (logic)
+  // inti of state - hydration
 
   function initTaskList(defaultTasksList) {
     if (Array.isArray(defaultTasksList)) {

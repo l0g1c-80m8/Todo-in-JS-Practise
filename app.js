@@ -24,18 +24,7 @@ function TodoApp() {
 
   // RemainingTaskList.prototype = Object.create(TaskList.prototype);
   // var remainingTaskList = new RemainingTaskList(defaultTasks);
-  var remainingTaskList = new TaskList({
-      listId: "remaining_task_list",
-      defaultTasksList: defaultTasks,
-      reqStatus: false,
-      handOff: handOff,
-    }),
-    completedTaskList = new TaskList({
-      listId: "completed_task_list",
-      defaultTasksList: defaultTasks,
-      reqStatus: true,
-      handOff: handOff,
-    });
+  var remainingTaskList, completedTaskList;
 
   function initPageElements() {
     //Add input for new tasks
@@ -117,6 +106,18 @@ function TodoApp() {
 
   this.runApp = function runApp() {
     initPageElements();
+    (remainingTaskList = new TaskList({
+      listId: "remaining_task_list",
+      defaultTasksList: defaultTasks,
+      reqStatus: false,
+      handOff: handOff,
+    })),
+      (completedTaskList = new TaskList({
+        listId: "completed_task_list",
+        defaultTasksList: defaultTasks,
+        reqStatus: true,
+        handOff: handOff,
+      }));
   };
 
   return;
